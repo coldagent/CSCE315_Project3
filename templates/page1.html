@@ -3,7 +3,7 @@
 <html>
 <head>
 
-     <link id="theme" rel="stylesheet" type="text/css" href="style.css" />
+     <link id="theme" rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}" />
      <title>RouteOut</title> <!-- website tab title --> 
      <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 </head>
@@ -12,7 +12,7 @@
 <body>
 
      <div class = "nav">
-          <a class = "logo" href="page1.html" >RouteOut(logo)</a>
+          <a class = "logo" href="/" >RouteOut(logo)</a>
      </div>
 
      <div class = "pg1-content">
@@ -31,7 +31,7 @@
                <input type="text" placeholder="Trip Date (optional)..">
 
                <!-- submit button acts like a link-->
-               <form action="page2.html">
+               <form action="/page2">
                     <input type="submit" value="Submit" />
                </form>
           </div>
