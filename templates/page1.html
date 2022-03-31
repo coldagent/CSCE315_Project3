@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+
+     <link id="theme" rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}" />
+     <title>RouteOut</title> <!-- website tab title --> 
+     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+
+<body>
+
+     <div class = "nav">
+          <a class = "logo" href="page1.html" >RouteOut(logo)</a>
+     </div>
+
+     <div class = "pg1-content">
+          <div class = "welcome"> 
+               <h1 class = "welcome-title">Welcome To Route Out!</h1>
+               <p1 class = "welcome-subtitle">
+                    <br><br>
+                    Plan your routes and keep the trip outdoors! Input your start and end destination,
+                    and find all outdoor events along your route. 
+                    Input a planned date to find activities that are available during those times. 
+               </p1>
+          </div>
+          <div class = "pg1-input">
+               <input type="text" placeholder="Start Location..">
+               <input type="text" placeholder="End Location..">
+               <input type="text" placeholder="Trip Date (optional)..">
+
+               <!-- submit button acts like a link-->
+               <form action="/page2/">
+                    <input type="submit" value="Submit" />
+               </form>
+          </div>
+          
+
+     </div>
+
+   
+
+
+  <!-- <script type="text/javascript" src="javas.js"></script> -->
+</body>
+</html>
