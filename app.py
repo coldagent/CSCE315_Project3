@@ -15,7 +15,7 @@ def GetRoute(startCoord, endCoord):
    # Setup request
    websiteSource = "https://api.mapbox.com/directions/v5/mapbox"
    travelMethod = "driving"
-   accessToken = "sk.eyJ1Ijoic2lyZXNxdWlyZWdvYXQiLCJhIjoiY2wxZjFraDExMHZnZDNqcGNud2I4eHRxdCJ9.f1ClrGFoSR0NeuKWmyo3oQ"
+   accessToken = ""
    htmlRequest = "{}/{}/{};{}?geometries=geojson&access_token={}".format(websiteSource, travelMethod, ",".join(str(x) for x in startCoord), ",".join(str(x) for x in endCoord), accessToken)
 
    # Process response
@@ -40,7 +40,7 @@ def LocToGeoCoords(location):
    # Setup request
    websiteSource = "https://api.mapbox.com/geocoding/v5"
    endPoint = "mapbox.places"
-   accessToken = "sk.eyJ1Ijoic2lyZXNxdWlyZWdvYXQiLCJhIjoiY2wxZjFraDExMHZnZDNqcGNud2I4eHRxdCJ9.f1ClrGFoSR0NeuKWmyo3oQ" 
+   accessToken = "" 
    htmlRequest = "{}/{}/{}.json?access_token={}".format(websiteSource, endPoint, str(location).replace(' ','+').replace(',', "%2C"), accessToken)
 
    # Process response
