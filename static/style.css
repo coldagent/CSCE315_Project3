@@ -6,14 +6,17 @@ body{
 }
 
 .pg1-content{
-     /* margin-right: 110px; */
      margin-left: 300px;
      width: 400px;
 }
 .pg1-input{
      width: 300px;
 }
-#map{
+#map {
      margin-top: 20px;
      height: 420px;
+     position: absolute;
+     top: 0;
+     bottom: 0;
+     width: 100%;
 }
