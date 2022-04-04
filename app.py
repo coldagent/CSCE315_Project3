@@ -33,7 +33,7 @@ def LocToGeoCoords():
    results = response.json()
    features = results.get("features")
    coordinates = features[0].get("geometry").get("coordinates")
-   return coordinates
+   return jsonify({"result": coordinates})
 
 
 
@@ -48,8 +48,8 @@ Parameters:
 @app.route("/get-route")
 def GetRoute():
 
-   startCoord = request.args.get("start")
-   endCoord = request.args.get("end")
+   startCoord = request.args.get("start").strip("[]").split(",")
+   endCoord = request.args.get("end").strip("[]").split(",")
 
    # Setup request
    websiteSource = "https://api.mapbox.com/directions/v5/mapbox"
