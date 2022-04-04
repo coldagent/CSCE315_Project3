@@ -1,8 +1,10 @@
 import requests
-from flask import Flask, render_template, request
-from jinja2 import Environment
+from flask import Flask, render_template, request, jsonify
 app = Flask(__name__)
 
+
+startLocation = ""
+endLocation = ""
 
 """
    !!! Don't store values returned from forward geo encoding, its against EULA (like in database and such, thats a no-no) !!!
@@ -53,8 +55,28 @@ def Utility_Processor():
       return response.get("waypoints")
    return dict(LocToGeoCoords = LocToGeoCoords, GetRoute = GetRoute)
 
+def LocToGeoCoords(location):
+      # Setup request
+      websiteSource = "https://api.mapbox.com/geocoding/v5"
+      endPoint = "mapbox.places"
+      accessToken = "sk.eyJ1Ijoic2lyZXNxdWlyZWdvYXQiLCJhIjoiY2wxZnIxczI0MDZtaTNpbjl0bGlzYjZibyJ9.a-nfmMP6FruqBlSzx9uQOg" 
+      htmlRequest = "{}/{}/{}.json?access_token={}".format(websiteSource, endPoint, str(location).replace(' ','+').replace(',', "%2C"), accessToken)
+
+      # Process response
+      response = requests.get(htmlRequest)
+      results = response.json()
+      features = results.get("features")
+      coordinates = features[0].get("geometry").get("coordinates")
+      print(coordinates)
+      return coordinates
 
 
+@app.route("/update-location")
+def UpdateLocations():
+   startLocation = request.args.get('start')
+   endLocation = request.args.get('end')
+   geoCoords = [LocToGeoCoords(startLocation), LocToGeoCoords(endLocation)]
+   return jsonify({"result": geoCoords})
 
 
 @app.context_processor
