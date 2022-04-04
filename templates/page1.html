@@ -4,10 +4,9 @@
 <head>
 
      <link id="theme" rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}" />
-     <title>RouteOut</title> <!-- website tab title --> 
+     <title>RouteOut</title> 
      <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 </head>
-
 
 <body>
 
@@ -26,22 +25,16 @@
                </p1>
           </div>
           <div class = "pg1-input">
-               <input type="text" placeholder="Start Location..">
-               <input type="text" placeholder="End Location..">
-               <input type="text" placeholder="Trip Date (optional)..">
+               <input type="text" name = "txt1" id = "text1" placeholder="Start Location..">
+               <input type="text" name = "txt2" id = "text2" placeholder="End Location..">
+               <input type="text" name = "txt3" id = "text3" placeholder="Trip Date (optional)..">
 
-               <!-- submit button acts like a link-->
-               <form action="/page2">
-                    <input type="submit" value="Submit" />
-               </form>
+
+               <button id="pg1-submit" >Submit</button>
+               <p id="testoutput"></p>
           </div>
-          
-
      </div>
-
+     <script type="text/javascript" src="{{ url_for('static', filename='javas1.js')}}"></script>
    
-
-
-  <!-- <script type="text/javascript" src="javas.js"></script> -->
 </body>
 </html>
