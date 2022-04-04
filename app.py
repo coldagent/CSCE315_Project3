@@ -3,8 +3,10 @@ from flask import Flask, render_template, request, jsonify
 app = Flask(__name__)
 
 
-startLocation = ""
-endLocation = ""
+"""
+   Callable URL functions
+"""
+
 
 """
    !!! Don't store values returned from forward geo encoding, its against EULA (like in database and such, thats a no-no) !!!
@@ -15,76 +17,64 @@ endLocation = ""
 
    returns [float, float] the coordinates of the most relevant location
 """
-@app.context_processor
-def Utility_Processor():
-   def LocToGeoCoords(location):
-      # Setup request
-      websiteSource = "https://api.mapbox.com/geocoding/v5"
-      endPoint = "mapbox.places"
-      accessToken = "sk.eyJ1Ijoic2lyZXNxdWlyZWdvYXQiLCJhIjoiY2wxZnIxczI0MDZtaTNpbjl0bGlzYjZibyJ9.a-nfmMP6FruqBlSzx9uQOg" 
-      htmlRequest = "{}/{}/{}.json?access_token={}".format(websiteSource, endPoint, str(location).replace(' ','+').replace(',', "%2C"), accessToken)
+@app.route("/get-coords")
+def LocToGeoCoords():
 
-      # Process response
-      response = requests.get(htmlRequest)
-      results = response.json()
-      features = results.get("features")
-      coordinates = features[0].get("geometry").get("coordinates")
-      print(coordinates)
-      return coordinates
+   location = request.args.get("loc")
 
-   """
-   Parameters: 
+   # Setup request
+   websiteSource = "https://api.mapbox.com/geocoding/v5"
+   endPoint = "mapbox.places"
+   accessToken = "sk.eyJ1Ijoic2lyZXNxdWlyZWdvYXQiLCJhIjoiY2wxZnIxczI0MDZtaTNpbjl0bGlzYjZibyJ9.a-nfmMP6FruqBlSzx9uQOg" 
+   htmlRequest = "{}/{}/{}.json?access_token={}".format(websiteSource, endPoint, str(location).replace(' ','+').replace(',', "%2C"), accessToken)
 
-      startCoord: [float, float] | coordinates for start location in form [longitude, latitude]
-      endCoord: [float, float]   | coordinates for start location in form [longitude, latitude]
+   # Process response
+   response = requests.get(htmlRequest)
+   results = response.json()
+   features = results.get("features")
+   coordinates = features[0].get("geometry").get("coordinates")
+   return coordinates
 
-      returns array of waypoint objects (refer to https://docs.mapbox.com/api/navigation/directions/#waypoint-object for waypoint objects)
-   """
-   def GetRoute(startCoord, endCoord):
-      # Setup request
-      websiteSource = "https://api.mapbox.com/directions/v5/mapbox"
-      travelMethod = "driving"
-      accessToken = "sk.eyJ1Ijoic2lyZXNxdWlyZWdvYXQiLCJhIjoiY2wxZnIxczI0MDZtaTNpbjl0bGlzYjZibyJ9.a-nfmMP6FruqBlSzx9uQOg"
-      htmlRequest = "{}/{}/{};{}?geometries=geojson&access_token={}".format(websiteSource, travelMethod, ",".join(str(x) for x in startCoord), ",".join(str(x) for x in endCoord), accessToken)
 
-      # Process response
-      response = requests.get(htmlRequest).json()
 
-      # Should make a function here that directs to an error page for if status_code != 200 (indicates error but 200 can also represent potenetial issues)
-         #print(response.status_code)
-      return response.get("waypoints")
-   return dict(LocToGeoCoords = LocToGeoCoords, GetRoute = GetRoute)
+"""
+Parameters: 
 
-def LocToGeoCoords(location):
-      # Setup request
-      websiteSource = "https://api.mapbox.com/geocoding/v5"
-      endPoint = "mapbox.places"
-      accessToken = "sk.eyJ1Ijoic2lyZXNxdWlyZWdvYXQiLCJhIjoiY2wxZnIxczI0MDZtaTNpbjl0bGlzYjZibyJ9.a-nfmMP6FruqBlSzx9uQOg" 
-      htmlRequest = "{}/{}/{}.json?access_token={}".format(websiteSource, endPoint, str(location).replace(' ','+').replace(',', "%2C"), accessToken)
+   startCoord: [float, float] | coordinates for start location in form [longitude, latitude]
+   endCoord: [float, float]   | coordinates for end location in form [longitude, latitude]
 
-      # Process response
-      response = requests.get(htmlRequest)
-      results = response.json()
-      features = results.get("features")
-      coordinates = features[0].get("geometry").get("coordinates")
-      print(coordinates)
-      return coordinates
+   returns geojson
+"""
+@app.route("/get-route")
+def GetRoute():
+
+   startCoord = request.args.get("start")
+   endCoord = request.args.get("end")
+
+   # Setup request
+   websiteSource = "https://api.mapbox.com/directions/v5/mapbox"
+   travelMethod = "driving"
+   accessToken = "sk.eyJ1Ijoic2lyZXNxdWlyZWdvYXQiLCJhIjoiY2wxZnIxczI0MDZtaTNpbjl0bGlzYjZibyJ9.a-nfmMP6FruqBlSzx9uQOg"
+   htmlRequest = "{}/{}/{};{}?geometries=geojson&access_token={}".format(websiteSource, travelMethod, ",".join(str(x) for x in startCoord), ",".join(str(x) for x in endCoord), accessToken)
+
+   # Process response
+   response = requests.get(htmlRequest).json()
+
+   # Should make a function here that directs to an error page for if status_code != 200 (indicates error but 200 can also represent potenetial issues)
+   return response
 
 
 @app.route("/update-location")
-def UpdateLocations():
-   startLocation = request.args.get('start')
-   endLocation = request.args.get('end')
-   geoCoords = [LocToGeoCoords(startLocation), LocToGeoCoords(endLocation)]
-   return jsonify({"result": geoCoords})
+def UpdateLocation():
+   start = request.args.get("start")
+   end = request.args.get("end")
+   return dict()
 
 
-@app.context_processor
-def SubmitRouteQuery():
-   print("submitted")
-   return dict(SubmitRouteQuery = "submitted")
 
-
+"""
+   Render template calls
+"""
 @app.route('/')
 def page1():
    return render_template('page1.html')
