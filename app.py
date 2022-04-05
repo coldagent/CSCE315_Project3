@@ -13,7 +13,7 @@ app = Flask(__name__)
 
    Parameters: 
 
-      location: string | name of the location being searched 
+      loc: string | name of the location being searched 
 
    returns [float, float] the coordinates of the most relevant location
 """
@@ -71,6 +71,21 @@ def UpdateLocation():
    return dict()
 
 
+@app.route("/set-coords-cookie")
+def SetCookie():
+   startCoord = request.args.get("start").strip("[]").split(",")
+   endCoord = request.args.get("end").strip("[]").split(",")
+
+   resp = make_response(render_template('readcookie.html'))
+   resp.set_cookie({'startCoord': startCoord, 'endCoord': endCoord})
+      
+
+@app.route("/get-coords-cookie")
+def GetCookie():
+   start = request.cookies.get('startCoord')
+   end = request.cookies.get('endCoord')
+
+   return jsonify({"result": "[" + start + "," + end + "]"})
 
 """
    Render template calls
