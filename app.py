@@ -1,5 +1,5 @@
 import requests
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, make_response
 app = Flask(__name__)
 
 
@@ -73,11 +73,14 @@ def UpdateLocation():
 
 @app.route("/set-coords-cookie")
 def SetCookie():
+   
    startCoord = request.args.get("start").strip("[]").split(",")
    endCoord = request.args.get("end").strip("[]").split(",")
 
-   resp = make_response(render_template('readcookie.html'))
-   resp.set_cookie({'startCoord': startCoord, 'endCoord': endCoord})
+   resp = make_response("cookie")
+   resp.set_cookie('startCoord', startCoord, max_age = 60*60*24*2)
+   resp.set_cookie('endCoord', endCoord, max_age = 60*60*24*2)
+   return resp
       
 
 @app.route("/get-coords-cookie")
