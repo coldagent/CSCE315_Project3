@@ -6,7 +6,7 @@ document.getElementById("pg1-submit").addEventListener("click", function(e) {
     let end = document.getElementById("text2").value;
 
 
-    fetch("http://127.0.0.1:5000/api/get-coords?loc=" + start)
+    fetch(window.location.href + "api/get-coords?loc=" + start)
     .then(response => response.json())
     .then(result => {
         SetCookie("startCoord", result.result, 1);
@@ -14,7 +14,7 @@ document.getElementById("pg1-submit").addEventListener("click", function(e) {
         document.getElementById("testGetCookieError").innerHTML = "error set cookie";
     })
 
-    fetch("http://127.0.0.1:5000/api/get-coords?loc=" + end)
+    fetch(window.location.href + "api/get-coords?loc=" + end)
     .then(response => response.json())
     .then(result => {
         SetCookie("endCoord", result.result, 1);
