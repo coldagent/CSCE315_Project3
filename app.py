@@ -17,10 +17,11 @@ app = Flask(__name__)
 
    returns [float, float] the coordinates of the most relevant location
 """
-@app.route("/get-coords")
+@app.route("/api/get-coords", methods = ['GET', 'POST'])
 def LocToGeoCoords():
-
    location = request.args.get("loc")
+
+   print(location)
 
    # Setup request
    websiteSource = "https://api.mapbox.com/geocoding/v5"
@@ -33,7 +34,7 @@ def LocToGeoCoords():
    results = response.json()
    features = results.get("features")
    coordinates = features[0].get("geometry").get("coordinates")
-   return jsonify({"result": coordinates})
+   return jsonify(result = coordinates)
 
 
 
@@ -45,7 +46,7 @@ Parameters:
 
    returns geojson
 """
-@app.route("/get-route")
+@app.route("/api/get-route")
 def GetRoute():
 
    startCoord = request.args.get("start").strip("[]").split(",")
@@ -64,31 +65,6 @@ def GetRoute():
    return response
 
 
-@app.route("/update-location")
-def UpdateLocation():
-   start = request.args.get("start")
-   end = request.args.get("end")
-   return dict()
-
-
-@app.route("/set-coords-cookie")
-def SetCookie():
-   
-   startCoord = request.args.get("start").strip("[]").split(",")
-   endCoord = request.args.get("end").strip("[]").split(",")
-
-   resp = make_response("cookie")
-   resp.set_cookie('startCoord', startCoord, max_age = 60*60*24*2)
-   resp.set_cookie('endCoord', endCoord, max_age = 60*60*24*2)
-   return resp
-      
-
-@app.route("/get-coords-cookie")
-def GetCookie():
-   start = request.cookies.get('startCoord')
-   end = request.cookies.get('endCoord')
-
-   return jsonify({"result": "[" + start + "," + end + "]"})
 
 """
    Render template calls
