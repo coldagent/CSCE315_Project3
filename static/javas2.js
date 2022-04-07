@@ -1,22 +1,31 @@
 //initialize map, the style, and starting position:
 startCoord = [];
-startCoord[0] = -97.325851;
-startCoord[1] = 30.622370;
+cookieStartCoord = getCookie("startCoord").split(",");
+startCoord[0] = parseFloat(cookieStartCoord[0]);
+startCoord[1] = parseFloat(cookieStartCoord[1]);
+endCoord = [];
+cookieEndCoord = getCookie("endCoord").split(",");
+endCoord[0] = parseFloat(cookieEndCoord[0]);
+endCoord[1] = parseFloat(cookieEndCoord[1]);
+
+mapCenterCoord = [];
+mapCenterCoord[0] = (startCoord[0] + endCoord[0]) / 2;
+mapCenterCoord[1] = (startCoord[1] + endCoord[1]) / 2;
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2lyZXNxdWlyZWdvYXQiLCJhIjoiY2wxYzZrdnJwMDRwODNib25qNHhrd2M4biJ9.pa9g1eB2KB_7PlqW-oT7Ew';
 const map = new mapboxgl.Map({
 container: 'map',
 style: 'mapbox://styles/siresquiregoat/cl1c6np0n000314o2vc7wp96g',
-center: startCoord,
+center: mapCenterCoord,
 zoom: 12
 });
 //bounds of the map
 lowerBound = [];
-lowerBound[0] = startCoord[0] - 0.5;
-lowerBound[1] = startCoord[1] - 0.5;
+lowerBound[0] = Math.min(startCoord[0], endCoord[0]) - 0.5;
+lowerBound[1] = Math.min(endCoord[1], startCoord[1]) - 0.5;
 upperBound = [];
-upperBound[0] = startCoord[0] + 0.5;
-upperBound[1] = startCoord[1] + 0.5;
+upperBound[0] = Math.max(startCoord[0], endCoord[0]) + 0.5;
+upperBound[1] = Math.max(endCoord[1], startCoord[1]) + 0.5;
 
 const bounds = [lowerBound, upperBound];
 map.setMaxBounds(bounds);
@@ -65,82 +74,72 @@ async function getRoute(end) {
      }
 }
 map.on('load', () => {
-     // make an initial directions request that
-     // starts and ends at the same location
-     getRoute(startCoord);
+     getRoute(endCoord);
 
      // Add starting point to the map
      map.addLayer({
-     id: 'point',
-     type: 'circle',
-     source: {
-          type: 'geojson',
-          data: {
-          type: 'FeatureCollection',
-          features: [
-               {
-               type: 'Feature',
-               properties: {},
-               geometry: {
-               type: 'Point',
-               coordinates: startCoord
-               }
-               }
-          ]
-          }
-     },
-     paint: {
-          'circle-radius': 10,
-          'circle-color': '#3887be'
-     }
-     });
-     //lets user click on the map to update destination location
-     map.on('click', (event) => {
-          const coords = Object.keys(event.lngLat).map((key) => event.lngLat[key]);
-          const end = {
-          type: 'FeatureCollection',
-          features: [
-               {
-               type: 'Feature',
-               properties: {},
-               geometry: {
-                    type: 'Point',
-                    coordinates: coords
-               }
-               }
-          ]
-          };
-          if (map.getLayer('end')) {
-          map.getSource('end').setData(end);
-          } else {
-          map.addLayer({
-               id: 'end',
-               type: 'circle',
-               source: {
+          id: 'point',
+          type: 'circle',
+          source: {
                type: 'geojson',
                data: {
-                    type: 'FeatureCollection',
-                    features: [
+               type: 'FeatureCollection',
+               features: [
                     {
                     type: 'Feature',
                     properties: {},
                     geometry: {
-                         type: 'Point',
-                         coordinates: coords
+                    type: 'Point',
+                    coordinates: startCoord
                     }
                     }
-                    ]
+               ]
                }
-               },
-               paint: {
+          },
+          paint: {
                'circle-radius': 10,
-               'circle-color': '#f30'
-               }
-          });
+               'circle-color': '#3887be'
           }
-          getRoute(coords);
+     });
+     map.addLayer({
+          id: 'end',
+          type: 'circle',
+          source: {
+          type: 'geojson',
+          data: {
+               type: 'FeatureCollection',
+               features: [
+               {
+                    type: 'Feature',
+                    properties: {},
+                    geometry: {
+                         type: 'Point',
+                         coordinates: endCoord
+               }
+               }
+               ]
+          }
+          },
+          paint: {
+          'circle-radius': 10,
+          'circle-color': '#f30'
+          }
      });
 });
 
-
-   
+//parses all cookie to get the cookie with cname
+function getCookie(cname) {
+     let name = cname + "=";
+     let decodedCookie = decodeURIComponent(document.cookie);
+     let ca = decodedCookie.split(';');
+     for(let i = 0; i <ca.length; i++) {
+       let c = ca[i];
+       while (c.charAt(0) == ' ') {
+         c = c.substring(1);
+       }
+       if (c.indexOf(name) == 0) {
+         return c.substring(name.length, c.length);
+       }
+     }
+     return "";
+}
