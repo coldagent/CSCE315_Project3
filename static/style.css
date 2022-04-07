@@ -1,19 +1,22 @@
 
 
-body {
-          background-image: url("image.png");
-          background-color: #cccccc;
-          /* opacity: 0.6; */
+body{
+     background-image: url("image.png");
+     background-color: #cccccc;
+}
 
-     }
-
-.pg1-content
-{
-     /* margin-right: 110px; */
+.pg1-content{
      margin-left: 300px;
      width: 400px;
 }
-.pg1-input
-{
+.pg1-input{
      width: 300px;
+}
+#map {
+     margin-top: 50px;
+     height: 420px;
+     position: absolute;
+     top: 0;
+     bottom: 0;
+     width: 100%;
 }
