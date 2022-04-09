@@ -14,10 +14,9 @@ mapCenterCoord[1] = (startCoord[1] + endCoord[1]) / 2;
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2lyZXNxdWlyZWdvYXQiLCJhIjoiY2wxYzZrdnJwMDRwODNib25qNHhrd2M4biJ9.pa9g1eB2KB_7PlqW-oT7Ew';
 const map = new mapboxgl.Map({
-container: 'map',
-style: 'mapbox://styles/siresquiregoat/cl1c6np0n000314o2vc7wp96g',
-center: mapCenterCoord,
-zoom: 12
+     container: 'map',
+     style: 'mapbox://styles/siresquiregoat/cl1c6np0n000314o2vc7wp96g',
+     center: mapCenterCoord
 });
 //bounds of the map
 lowerBound = [];
@@ -28,13 +27,13 @@ upperBound[0] = Math.max(startCoord[0], endCoord[0]) + 0.5;
 upperBound[1] = Math.max(endCoord[1], startCoord[1]) + 0.5;
 
 const bounds = [lowerBound, upperBound];
-map.setMaxBounds(bounds);
+map.fitBounds(bounds);
 
 // function makes a directions request //uses cycling profile for now
 async function getRoute(end) {
 
      const query = await fetch(
-     `https://api.mapbox.com/directions/v5/mapbox/cycling/${startCoord[0]},${startCoord[1]};${end[0]},${end[1]}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`,
+     `https://api.mapbox.com/directions/v5/mapbox/driving/${startCoord[0]},${startCoord[1]};${end[0]},${end[1]}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`,
      { method: 'GET' }
      );
      const json = await query.json();
