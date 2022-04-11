@@ -16,6 +16,27 @@
 
           </div>
           <div id='map'></div>
+
+          <div class="tab">
+               <button class="tablinks" onclick="openActivities(event, 'Activity1')">Activity1</button>
+               <button class="tablinks" onclick="openActivities(event, 'Activity2')">Activity2</button>
+               <button class="tablinks" onclick="openActivities(event, 'Activity3')">Activity3</button>
+          </div>
+          
+          <div id="Activity1" class="tabcontent">
+               <h3>Activity1</h3>
+               <p>Activity1 activities list</p>
+          </div>
+          
+          <div id="Activity2" class="tabcontent">
+               <h3>Activity2</h3>
+               <p>Activity2 activities list</p> 
+          </div>
+          
+          <div id="Activity3" class="tabcontent">
+               <h3>Activity3</h3>
+               <p>Activity3 activities list</p>
+          </div>
           <script type="text/javascript" src="{{ url_for('static', filename='javas2.js')}}"></script>
      </body>
 </html>
