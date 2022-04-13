@@ -32,7 +32,7 @@ function FetchCoordinates(start, end){
 }
 
 function Load2ndPage(){
-    window.location.href = "/page2";
+    window.location.href = "/plan";
 }
 
 //cname = string, cvalue = string, exdays = int

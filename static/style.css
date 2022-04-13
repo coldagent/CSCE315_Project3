@@ -1,8 +1,19 @@
-
+@import url(//db.onlinewebfonts.com/c/6650021ca0704cba7b377bf4c0bbe673?family=DSariW01-Heavy);
+@font-face {
+     font-family: "DSariW01-Heavy"; 
+     src: url("//db.onlinewebfonts.com/t/6650021ca0704cba7b377bf4c0bbe673.eot"); 
+     src: url("//db.onlinewebfonts.com/t/6650021ca0704cba7b377bf4c0bbe673.eot?#iefix") format("embedded-opentype"), 
+     url("//db.onlinewebfonts.com/t/6650021ca0704cba7b377bf4c0bbe673.woff2") format("woff2"), 
+     url("//db.onlinewebfonts.com/t/6650021ca0704cba7b377bf4c0bbe673.woff") format("woff"), 
+     url("//db.onlinewebfonts.com/t/6650021ca0704cba7b377bf4c0bbe673.ttf") format("truetype"), 
+     url("//db.onlinewebfonts.com/t/6650021ca0704cba7b377bf4c0bbe673.svg#DSariW01-Heavy") format("svg"); 
+}
 
 body{
      background-image: url("image.png");
      background-color: #cccccc;
+     margin: 0;
+     font-family: DSariW01-Heavy;
 }
 
 .pg1-content{
@@ -13,16 +24,15 @@ body{
      width: 300px;
 }
 #map {
-     margin-top: 50px;
+     margin: 10px;
      height: 420px;
-     position: absolute;
      top: 0;
      bottom: 0;
      width: 100%;
 }
 
 .tab {
-     margin-top: 480px;
+     margin: 10px;
      overflow: hidden;
      border: 1px solid rgb(0, 0, 0);
      background-color: #b6b6b6;
@@ -56,4 +66,53 @@ body{
      padding: 6px 12px;
      border: 1px solid rgb(0, 0, 0);
      border-top: none;
+}
+
+/* Style the Logo Image */
+.logoImage {
+     margin: 0;
+     padding-top: 5px;
+     padding-right: 30px;
+     padding-left: 5px;
+}
+
+/* Style to navigation bar */
+.nav {
+     top: 0;
+     left: 0;
+     width: 100%;
+     background-color: gray;
+     overflow: hidden;
+     margin: 0;
+     border: 0;
+     padding: 0;
+     display: inline-flex;
+}
+
+/* Style nav Buttons */
+.nav a:not(:first-of-type) {
+     color: black;
+     text-align: center;
+     text-decoration: none;
+     padding-right: 15px;
+     padding-left: 15px;
+     font-size: xx-large;
+     border-right: 2px solid black;
+     border-left: 2px solid black;
+     height: 70px;
+     line-height: 70px;
+}
+
+.nav a:last-child {
+     border-left: none;
+}
+
+/* Style all elements of nav */
+.nav a {
+     vertical-align: middle;
+}
+
+/* Style hover color */
+.nav a:not(:first-of-type):hover {
+     background-color: rgb(108, 108, 108);
 }

@@ -9,11 +9,13 @@
           <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js'></script>
           <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css' rel='stylesheet' />
           <link id="theme" rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}" />
+          <link href="//db.onlinewebfonts.com/c/6650021ca0704cba7b377bf4c0bbe673?family=DSariW01-Heavy" rel="stylesheet" type="text/css"/>
      </head>
      <body>
           <div class = "nav">
-               <a class = "logo" href="/" >RouteOut(logo)</a>
-
+               <a class = "logo" href="/" ><img class = "logoImage" src="../static/Logo.png"></a>
+               <a class = "home" href="/" >Home</a>
+               <a class = "plan" href="/plan" >Plan</a>
           </div>
           <div id='map'></div>
 
