@@ -190,7 +190,19 @@ async function markerFunc(coordArray) {
                               const height = marker.properties.iconSize[1];
                               el.className = 'marker';
                               //(await fetch) if marker.geometry.coordinates get forecast, set different weather icons
-                              el.style.backgroundImage = `url(https://www.pngitem.com/pimgs/m/18-186328_transparent-smiley-face-clipart-sunny-clipart-hd-png.png)`;
+                              (async () => {await fetch(window.location.origin + "/api/forecast?coord=" + coordArray[i] + "")
+                              .then(response => response.json())
+                              .then(result => {
+                                   if (result.result == "Sunny") {
+                                        el.style.backgroundImage = `url(https://www.pngitem.com/pimgs/m/18-186328_transparent-smiley-face-clipart-sunny-clipart-hd-png.png)`;
+                                   }
+                                   else {
+                                        el.style.backgroundImage = `url(https://toppng.com//public/uploads/preview/image-grey-cloud-clipart-11562970825nsz4l7vplv.png)`;
+                                   }
+                              }).catch(error => {
+                                   console.log(error);
+                              });})()
+                              
                               el.style.width = `${width}px`;
                               el.style.height = `${height}px`;
                               el.style.backgroundSize = '100%';

@@ -3,17 +3,18 @@
 // When "pg1-submit" button is clicked, 
 //start and end coords are saved to cookie
 //next page loads after 1sec giving enough time for cookie to be set
-document.getElementById("pg1-submit").addEventListener("click", function(e) {
+document.getElementById("pg1-submit").addEventListener("click", async function(e) {
     let start = document.getElementById("text1").value;
     let end = document.getElementById("text2").value;
 
-    FetchCoordinates(start, end);
-    setTimeout(Load2ndPage, 1000);
+    await FetchCoordinates(start, end);
+    Load2ndPage();
+    //setTimeout(Load2ndPage, 1000);
 });
 
 
-function FetchCoordinates(start, end){
-    fetch(window.location.href + "api/get-coords?loc=" + start)
+async function FetchCoordinates(start, end){
+    await fetch(window.location.href + "api/get-coords?loc=" + start)
     .then(response => response.json())
     .then(result => {
         SetCookie("startCoord", result.result, 1);
@@ -21,7 +22,7 @@ function FetchCoordinates(start, end){
         document.getElementById("testGetCookieError").innerHTML = "error set cookie";
     });
 
-    fetch(window.location.href + "api/get-coords?loc=" + end)
+    await fetch(window.location.href + "api/get-coords?loc=" + end)
     .then(response => response.json())
     .then(result => {
         SetCookie("endCoord", result.result, 1);
