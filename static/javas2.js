@@ -77,7 +77,7 @@ map.on('load', () => {
 
      // Add starting point to the map
      map.addLayer({
-          id: 'point',
+          id: 'markStart',
           type: 'circle',
           source: {
                type: 'geojson',
@@ -101,7 +101,7 @@ map.on('load', () => {
           }
      });
      map.addLayer({
-          id: 'end',
+          id: 'markEnd',
           type: 'circle',
           source: {
           type: 'geojson',
