@@ -164,10 +164,6 @@ function openActivities(evt, cityName) {
 // tests if coordinates are too close together
 async function markerFunc(coordArray) {
      let prevMark = 0;
-     const geojson = {
-          'type': 'FeatureCollection',
-          'features': []
-     };
      for (let i = 0; i < coordArray.length; i++) {
           if (i > 0) {
                await fetch(window.location.origin + "/api/get-route?start=" + coordArray[prevMark] + "&end=" + coordArray[i] + "")
@@ -177,7 +173,7 @@ async function markerFunc(coordArray) {
                          if (distance > 100000) { //add tot distance to parameter and calculate the space distance btwn markers
                               console.log("if");
                               prevMark = i;
-                              geojson.features.push({
+                              const marker = {
                                    'type': 'Feature',
                                    'properties': {
                                         'iconSize': [40, 40]
@@ -186,8 +182,27 @@ async function markerFunc(coordArray) {
                                         'type': 'Point',
                                         'coordinates': coordArray[i]
                                    }
-                              })
-                              
+                              };
+
+                              // Create a DOM element for each marker.
+                              const el = document.createElement('div');
+                              const width = marker.properties.iconSize[0];
+                              const height = marker.properties.iconSize[1];
+                              el.className = 'marker';
+                              //(await fetch) if marker.geometry.coordinates get forecast, set different weather icons
+                              el.style.backgroundImage = `url(https://www.pngitem.com/pimgs/m/18-186328_transparent-smiley-face-clipart-sunny-clipart-hd-png.png)`;
+                              el.style.width = `${width}px`;
+                              el.style.height = `${height}px`;
+                              el.style.backgroundSize = '100%';
+
+                              el.addEventListener('click', () => {
+                                   window.alert(marker.properties.message);
+                              });
+
+                              // Add markers to the map.
+                              new mapboxgl.Marker(el)
+                                   .setLngLat(marker.geometry.coordinates)
+                                   .addTo(map);
                          }
                          else {
                               console.log("else");
@@ -198,28 +213,6 @@ async function markerFunc(coordArray) {
                          console.log(error)
                     });
           }
-     }
-
-     for (const marker of geojson.features) {
-          // Create a DOM element for each marker.
-          const el = document.createElement('div');
-          const width = marker.properties.iconSize[0];
-          const height = marker.properties.iconSize[1];
-          el.className = 'marker';
-          //(await fetch) if marker.geometry.coordinates get forecast, set different weather icons
-          el.style.backgroundImage = `url(https://www.pngitem.com/pimgs/m/18-186328_transparent-smiley-face-clipart-sunny-clipart-hd-png.png)`;
-          el.style.width = `${width}px`;
-          el.style.height = `${height}px`;
-          el.style.backgroundSize = '100%';
-
-          el.addEventListener('click', () => {
-               window.alert(marker.properties.message);
-          });
-
-          // Add markers to the map.
-          new mapboxgl.Marker(el)
-               .setLngLat(marker.geometry.coordinates)
-               .addTo(map);
      }
 }
 
