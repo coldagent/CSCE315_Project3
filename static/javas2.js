@@ -7,7 +7,7 @@ endCoord = [];
 cookieEndCoord = getCookie("endCoord").split(",");
 endCoord[0] = parseFloat(cookieEndCoord[0]);
 endCoord[1] = parseFloat(cookieEndCoord[1]);
-
+weatherPoints();
 mapCenterCoord = [];
 mapCenterCoord[0] = (startCoord[0] + endCoord[0]) / 2;
 mapCenterCoord[1] = (startCoord[1] + endCoord[1]) / 2;
@@ -156,4 +156,30 @@ function openActivities(evt, cityName) {
      }
      document.getElementById(cityName).style.display = "block";
      evt.currentTarget.className += " active";
+}
+
+function weatherPoints() {
+     //document.getElementById("testhere").innerHTML = cookieStartCoord;
+     //
+     // fetch(window.location.origin + "/api/get-route?start=[" + startCoord + "]&end=[" + endCoord + "]")
+     // .then(response => response.json())
+     // .then(result => {
+     //      distance = result['routes'][0]['distance']; //meters
+     //      //duration = result['routes'][0]['duration']; //minutes
+     //      document.getElementById("testhere").innerHTML = distance;
+     //      //return distance;
+     // }).catch(error => {
+     //      document.getElementById("testhere").innerHTML = "error";
+     // });
+     fetch(window.location.origin + "/api/forecast?coord=[" + startCoord + "]")
+     .then(response => response.json())
+     .then(result => 
+          //distance = result['routes'][0]['distance']; //meters
+          //duration = result['routes'][0]['duration']; //minutes
+          document.getElementById("testhere").innerHTML = result.result
+          
+          //return distance;
+     ).catch(error => {
+          document.getElementById("testhere").innerHTML = "error"
+     });
 }

@@ -18,7 +18,7 @@ def GetForecastZoneByCoords():
     coord = request.args.get("coord").strip("[]").replace(" ", "").split(",")
 
     # Setup request
-    htmlRequest = "https://api.weather.gov/points/{},{}".format(coord[0], coord[1])
+    htmlRequest = "https://api.weather.gov/points/{},{}".format(coord[1], coord[0])
 
     # Process response
     response = requests.get(htmlRequest).json()
@@ -44,7 +44,9 @@ def GetForecast():
 
     response = requests.get(forecastString).json()
 
-    return response
+    periods = response.get("properties").get("periods")
+    shortFore = periods[0].get("shortForecast")
+    return jsonify(result = shortFore)
 
 
 
