@@ -8,7 +8,6 @@ cookieEndCoord = getCookie("endCoord").split(",");
 endCoord[0] = parseFloat(cookieEndCoord[0]);
 endCoord[1] = parseFloat(cookieEndCoord[1]);
 totalDistance();
-//document.getElementById("testhere").innerHTML = totalDistance();
 mapCenterCoord = [];
 mapCenterCoord[0] = (startCoord[0] + endCoord[0]) / 2;
 mapCenterCoord[1] = (startCoord[1] + endCoord[1]) / 2;
@@ -19,6 +18,7 @@ const map = new mapboxgl.Map({
      style: 'mapbox://styles/siresquiregoat/cl1c6np0n000314o2vc7wp96g',
      center: mapCenterCoord
 });
+
 //bounds of the map
 lowerBound = [];
 lowerBound[0] = Math.min(startCoord[0], endCoord[0]) - 0.5;
@@ -31,6 +31,7 @@ const bounds = [lowerBound, upperBound];
 map.fitBounds(bounds);
 
 // function makes a directions request 
+// highlights the route
 async function getRoute(end) {
 
      const query = await fetch(
@@ -73,10 +74,10 @@ async function getRoute(end) {
           });
      }
 }
+// on map load, mark the start and end coordinates
 map.on('load', () => {
      getRoute(endCoord);
 
-     // Add starting point to the map
      map.addLayer({
           id: 'markStart',
           type: 'circle',
@@ -145,7 +146,7 @@ function getCookie(cname) {
      return "";
 }
 
-//activities tab
+//opens tab onclick
 function openActivities(evt, cityName) {
      var i, tabcontent, tablinks;
      tabcontent = document.getElementsByClassName("tabcontent");
@@ -161,7 +162,8 @@ function openActivities(evt, cityName) {
 }
 
 // adds markers to route using "coordinate" array from API 
-// tests if coordinates are too close together
+// makes sure coordinates are not too close together
+// tests the forecast of each coordinate and prints the appropriate weather icon
 async function markerFunc(coordArray) {
      let prevMark = 0;
      for (let i = 0; i < coordArray.length; i++) {
@@ -189,7 +191,6 @@ async function markerFunc(coordArray) {
                               const width = marker.properties.iconSize[0];
                               const height = marker.properties.iconSize[1];
                               el.className = 'marker';
-                              //(await fetch) if marker.geometry.coordinates get forecast, set different weather icons
                               (async () => {await fetch(window.location.origin + "/api/forecast?coord=" + coordArray[i] + "")
                               .then(response => response.json())
                               .then(result => {
@@ -228,37 +229,23 @@ async function markerFunc(coordArray) {
      }
 }
 
-
+//api call to get-route
+// calculates total distance 
+// calls markerFunc and sends coordinates array along the route
 async function totalDistance() {
      fetch(window.location.origin + "/api/get-route?start=[" + startCoord + "]&end=[" + endCoord + "]")
           .then(response => response.json())
           .then(result => {
                distance = result['routes'][0]['distance']; //meters
-               //duration = result['routes'][0]['duration']; //minutes
-               //document.getElementById("testhere").innerHTML = distance;
                markerFunc(result['routes'][0]['geometry']['coordinates']);
-               //set = result['routes'][0]['geometry']['coordinates'];
                console.log(set);
 
-               return set;
+               //return set;
           }).catch(error => {
                return "error"
           });
 }
 
-async function weatherOfPoints(coordWeather) {
 
-     fetch(window.location.origin + "/api/forecast?coord=[" + coordWeather + "]")
-          .then(response => response.json())
-          .then(result =>
-               //distance = result['routes'][0]['distance']; //meters
-               //duration = result['routes'][0]['duration']; //minutes
-               document.getElementById("testhere").innerHTML = result.result
-
-               //return distance;
-          ).catch(error => {
-               document.getElementById("testhere").innerHTML = "error"
-          });
-}
-
-
+//distance = result['routes'][0]['distance']; //meters
+//duration = result['routes'][0]['duration']; //minutes

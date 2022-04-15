@@ -7,9 +7,9 @@ document.getElementById("pg1-submit").addEventListener("click", async function(e
     let start = document.getElementById("text1").value;
     let end = document.getElementById("text2").value;
 
+    //makes the function wait to finish before going to next line
     await FetchCoordinates(start, end);
     Load2ndPage();
-    //setTimeout(Load2ndPage, 1000);
 });
 
 
