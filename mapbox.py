@@ -55,6 +55,3 @@ def LocToGeoCoords():
    coordinates = features[0].get("geometry").get("coordinates")
    return jsonify(result = coordinates)
 
-
-def Test():
-   print("Test worked")
