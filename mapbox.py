@@ -40,8 +40,6 @@ def CalcRoute():
 def LocToGeoCoords():
    location = request.args.get("loc")
 
-   print(location)
-
    # Setup request
    websiteSource = "https://api.mapbox.com/geocoding/v5"
    endPoint = "mapbox.places"

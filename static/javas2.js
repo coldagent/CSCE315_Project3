@@ -12,10 +12,11 @@ mapCenterCoord = [];
 mapCenterCoord[0] = (startCoord[0] + endCoord[0]) / 2;
 mapCenterCoord[1] = (startCoord[1] + endCoord[1]) / 2;
 
+
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2lyZXNxdWlyZWdvYXQiLCJhIjoiY2wxYzZrdnJwMDRwODNib25qNHhrd2M4biJ9.pa9g1eB2KB_7PlqW-oT7Ew';
 const map = new mapboxgl.Map({
      container: 'map',
-     style: 'mapbox://styles/siresquiregoat/cl1c6np0n000314o2vc7wp96g',
+     style: 'mapbox://styles/siresquiregoat/cl23z7yxp000q15mss6lfn7x5',
      center: mapCenterCoord
 });
 
@@ -34,8 +35,9 @@ map.fitBounds(bounds);
 // highlights the route
 async function getRoute(end) {
 
+     // I replaced the query to map box with the query to our internal API  - ERIK (when I tested it worked fine)
      const query = await fetch(
-          `https://api.mapbox.com/directions/v5/mapbox/driving/${startCoord[0]},${startCoord[1]};${end[0]},${end[1]}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}&overview=full`,
+          window.location.origin + `/api/get-route?start=[${startCoord[0]},${startCoord[1]}]&end=[${end[0]},${end[1]}]`,
           { method: 'GET' }
      );
      const json = await query.json();
