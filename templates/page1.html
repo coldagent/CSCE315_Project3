@@ -5,15 +5,19 @@
      <link href="//db.onlinewebfonts.com/c/6650021ca0704cba7b377bf4c0bbe673?family=DSariW01-Heavy" rel="stylesheet" type="text/css"/>
      <link id="theme" rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}" />
      <title>RouteOut</title> 
+     <script src="../static/accessibility.js"></script>
      <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 </head>
 
 <body>
 
      <div class = "nav">
-          <a class = "logo" href="/" ><img class = "logoImage" src="../static/Logo.png"></a>
+          <a class = "logo" href="/" ><img class = "logoImage" src="../static/logo.png"></a>
           <a class = "home" href="/" >Home</a>
           <a class = "plan" href="/plan" >Plan</a>
+          <button class = "acb" onclick="change()">
+               <img class = "acbImage" src="../static/enlargement.png">
+          </button>
      </div>
 
      <div class = "pg1-content">

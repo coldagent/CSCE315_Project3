@@ -103,7 +103,7 @@ body{
      line-height: 70px;
 }
 
-.nav a:last-child {
+.nav a:nth-last-child(2) {
      border-left: none;
 }
 
@@ -115,4 +115,18 @@ body{
 /* Style hover color */
 .nav a:not(:first-of-type):hover {
      background-color: rgb(108, 108, 108);
+}
+
+/* Style accessibility Image */
+.acbImage {
+     height: 64px;
+     float: right;
+}
+
+/* Style accessibility Button */
+.acb {
+     top: 0;
+     right: 0;
+     position: absolute;
+     background-color: red;
 }
