@@ -16,13 +16,22 @@ body{
      font-family: DSariW01-Heavy;
 }
 
+body:not(.acb) {
+     font-size: 200%;
+}
+
 .pg1-content{
      margin-left: 300px;
-     width: 500px;
+     width: 700px;
 }
 .pg1-input{
-     width: 500px;
-     margin: auto;
+     width: 700px;
+}
+.pg1-input input {
+     font-size: large;
+}
+.pg1-input button {
+     font-size: large;
 }
 #map {
      margin: 10px;
@@ -129,8 +138,9 @@ body{
      top: 0;
      right: 0;
      position: absolute;
-     background-color: red;
+     background-color: green;
 }
+
 .acb:hover {
-     background-color: rgb(155, 0, 0);
+    background-color: rgb(0, 78, 0);
 }
