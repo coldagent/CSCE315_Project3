@@ -8,28 +8,32 @@ document.getElementById("pg1-submit").addEventListener("click", async function(e
     let end = document.getElementById("text2").value;
 
     //makes the function wait to finish before going to next line
-    await FetchCoordinates(start, end);
-    Load2ndPage();
+    FetchCoordinates(start, end);
 });
 
 
 async function FetchCoordinates(start, end){
-    await fetch(window.location.href + "api/get-coords?loc=" + start)
+    startPromise = fetch(window.location.href + "api/get-coords?loc=" + start)
     .then(response => response.json())
     .then(result => {
         SetCookie("startCoord", result.result, 1);
     }).catch(error => {
+        // Maybe change to a console error message to obsure issues on the user's side?
         document.getElementById("testGetCookieError").innerHTML = "error set cookie";
     });
 
-    await fetch(window.location.href + "api/get-coords?loc=" + end)
+    endPromise = fetch(window.location.href + "api/get-coords?loc=" + end)
     .then(response => response.json())
     .then(result => {
         SetCookie("endCoord", result.result, 1);
     }).catch(error => {
         document.getElementById("testGetCookieError").innerHTML = "error set cookie";
     });
-    //setTimeout(() => {}, 500);
+    
+
+    Promise.all([startPromise, endPromise]).then(result => {
+        Load2ndPage();
+    });
 }
 
 function Load2ndPage(){

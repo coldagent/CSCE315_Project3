@@ -173,7 +173,7 @@ async function markerFunc(coordArray) {
                await fetch(window.location.origin + "/api/get-route?start=" + coordArray[prevMark] + "&end=" + coordArray[i] + "")
                     .then(response => response.json())
                     .then(result => {
-                         distance = result['routes'][0]['distance'];
+                         distance = result.routes[0].distance;
                          if (distance > 100000) { //add tot distance to parameter and calculate the space distance btwn markers
                               console.log("if");
                               prevMark = i;
@@ -197,10 +197,12 @@ async function markerFunc(coordArray) {
                               .then(response => response.json())
                               .then(result => {
                                    if (result.result == "Sunny") {
-                                        el.style.backgroundImage = `url(https://www.pngitem.com/pimgs/m/18-186328_transparent-smiley-face-clipart-sunny-clipart-hd-png.png)`;
+                                        //el.style.backgroundImage = `url(https://www.pngitem.com/pimgs/m/18-186328_transparent-smiley-face-clipart-sunny-clipart-hd-png.png)`;
+                                        el.style.backgroundImage = `url(${window.location.origin}/static/sunny-icon.png)`;
                                    }
                                    else {
-                                        el.style.backgroundImage = `url(https://toppng.com//public/uploads/preview/image-grey-cloud-clipart-11562970825nsz4l7vplv.png)`;
+                                        //el.style.backgroundImage = `url(https://toppng.com//public/uploads/preview/image-grey-cloud-clipart-11562970825nsz4l7vplv.png)`;
+                                        el.style.backgroundImage = `url(${window.location.origin}/static/rain-icon.png)`;
                                    }
                               }).catch(error => {
                                    console.log(error);
@@ -210,9 +212,10 @@ async function markerFunc(coordArray) {
                               el.style.height = `${height}px`;
                               el.style.backgroundSize = '100%';
 
-                              el.addEventListener('click', () => {
-                                   window.alert(marker.properties.message);
-                              });
+                              // Not needed as of now since we arn't adding data to the markers
+                              // el.addEventListener('click', () => {
+                              //      window.alert(marker.properties.message);
+                              // });
 
                               // Add markers to the map.
                               new mapboxgl.Marker(el)

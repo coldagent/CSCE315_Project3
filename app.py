@@ -8,6 +8,7 @@ app = Flask(__name__)
 """
 import mapbox 
 import nws
+import nps
 
 
 
@@ -34,6 +35,11 @@ def GetCoords():
 @app.route("/api/get-route")
 def GetRoute():
    return mapbox.CalcRoute()
+
+@app.route("/api/park-data")
+def ParkData():
+   nps.FillParkData()
+   return nps.FindClosestPark()
 
 
 
