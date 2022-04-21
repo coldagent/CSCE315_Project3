@@ -51,7 +51,7 @@ def page1():
    return render_template('page1.html')
 
 
-@app.route('/page2')
+@app.route('/plan')
 def page2():
    return render_template('page2.html')
 if __name__ == '__main__':

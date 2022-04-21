@@ -2,9 +2,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-     <link id="theme" rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}" />
+     <link href="//db.onlinewebfonts.com/c/6650021ca0704cba7b377bf4c0bbe673?family=DSariW01-Heavy" rel="stylesheet" type="text/css"/>
+     <link id="theme" rel="stylesheet" type="text/css" href="../static/style.css" />
      <title>RouteOut</title> 
+     <script src="../static/accessibility.js"></script>
+     <script>chooseTheme()</script>
      <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
      <!-- Favicon -->
@@ -15,7 +17,12 @@
 <body>
 
      <div class = "nav">
-          <a class = "logo" href="/" >RouteOut(logo)</a>
+          <a class = "logo" href="/" ><img class = "logoImage" src="../static/logo.png"></a>
+          <a class = "home" href="/" >Home</a>
+          <a class = "plan" href="/plan" >Plan</a>
+          <button class = "acb" onclick="change();">
+               <img class = "acbImage" src="../static/enlargement.png">
+          </button>
      </div>
 
      <div class = "pg1-content">
@@ -26,12 +33,15 @@
                     Plan your routes and keep the trip outdoors! Input your start and end destination,
                     and find all outdoor events along your route. 
                     Input a planned date to find activities that are available during those times. 
-               </p1>
+               </p1><br>
           </div>
           <div class = "pg1-input">
-               <input type="text" name = "txt1" id = "text1" placeholder="Start Location..">
-               <input type="text" name = "txt2" id = "text2" placeholder="End Location..">
-               <input type="text" name = "txt3" id = "text3" placeholder="Trip Date (optional)..">
+               <label for="txt1">Start Location:</label>
+               <input type="text" name = "txt1" id = "text1" placeholder="i.e. Houston, Texas"><br>
+               <label for="txt2">End Location:</label>
+               <input type="text" name = "txt2" id = "text2" placeholder="i.e. Orlando, Florida"><br>
+               <label for="txt3">Trip Date (optional):</label>
+               <input type="text" name = "txt3" id = "text3" placeholder="MM/DD/YYYY"><br>
 
 
                <button id="pg1-submit" >Submit</button>
