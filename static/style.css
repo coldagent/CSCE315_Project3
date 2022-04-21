@@ -69,6 +69,15 @@ body{
      border-top: none;
 }
 
+
+.marker {
+     display: block;
+     border: none;
+     border-radius: 50%;
+     cursor: pointer;
+     padding: 0;
+     }
+
 /* Style the Logo Image */
 .logoImage {
      margin: 0;
@@ -134,3 +143,4 @@ body{
 .acb:hover {
      background-color: rgb(155, 0, 0);
 }
+
