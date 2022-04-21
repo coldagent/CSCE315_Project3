@@ -8,16 +8,24 @@
           <meta name='viewport' content='width=device-width, initial-scale=1' />
           <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js'></script>
           <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css' rel='stylesheet' />
-          <link id="theme" rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}" />
 
           <!-- Favicon -->
           <link rel="icon" type="image/png" href="../static/favicon-16x16.png" sizes="16x16" />
           <link rel="icon" type="image/png" href="../static/favicon-32x32.png" sizes="32x32" />
+
+          <link id="theme" rel="stylesheet" type="text/css" href="../static/style.css" />
+          <link href="//db.onlinewebfonts.com/c/6650021ca0704cba7b377bf4c0bbe673?family=DSariW01-Heavy" rel="stylesheet" type="text/css"/>
+          <script src="../static/accessibility.js"></script>
+          <script>chooseTheme()</script>
      </head>
      <body>
           <div class = "nav">
-               <a class = "logo" href="/" >RouteOut(logo)</a>
-
+               <a class = "logo" href="/" ><img class = "logoImage" src="../static/logo.png"></a>
+               <a class = "home" href="/" >Home</a>
+               <a class = "plan" href="/plan" >Plan</a>
+               <button class = "acb" onclick="change();">
+                    <img class = "acbImage" src="../static/enlargement.png">
+               </button>
           </div>
           <div id='map'></div>
 
