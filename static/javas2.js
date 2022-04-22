@@ -198,17 +198,37 @@ async function markerFunc(coordArray) {
                     const el = document.createElement('div');
                     const width = marker.properties.iconSize[0];
                     const height = marker.properties.iconSize[1];
+                    const sunnyWords = ['Sunny', 'Clear','Fair'];
+                    const cloudyWords = ['Cloud', 'Overcast'];
+                    const rainyWords = ['Rain', 'Drizzle','Shower'];
+                    const snowWords = ['Freezing', 'Ice','Snow', 'Hail'];
+                    const thunderstormWords = ['Thunderstorm'];
+
                     el.className = 'marker';
-                    (async () => {await fetch(window.location.origin + "/api/forecast?coord=" + coordArray[i] + "")
+                    (async () => {await fetch(window.location.origin + "/api/forecast?coord=" + coordArray[i] )
                     .then(response => response.json())
                     .then(result => {
-                         if (result.result == "Sunny") {
+                         if (thunderstormWords.some(thunderstormWords => (result.result).includes(thunderstormWords))) {
                               //el.style.backgroundImage = `url(https://www.pngitem.com/pimgs/m/18-186328_transparent-smiley-face-clipart-sunny-clipart-hd-png.png)`;
+                              el.style.backgroundImage = `url(${window.location.origin}/static/thunderstorm-icon.png)`;
+                         }
+                         else if (snowWords.some(snowWords => (result.result).includes(snowWords))) {
+                              //el.style.backgroundImage = `url(https://www.pngitem.com/pimgs/m/18-186328_transparent-smiley-face-clipart-sunny-clipart-hd-png.png)`;
+                              el.style.backgroundImage = `url(${window.location.origin}/static/snow-icon.png)`;
+                         }
+                         else if (rainyWords.some(rainyWords => (result.result).includes(rainyWords))) {
+                              //el.style.backgroundImage = `url(https://www.pngitem.com/pimgs/m/18-186328_transparent-smiley-face-clipart-sunny-clipart-hd-png.png)`;
+                              el.style.backgroundImage = `url(${window.location.origin}/static/rain-icon.png)`;
+                         }
+                         else if (cloudyWords.some(cloudyWords => (result.result).includes(cloudyWords))) {
+                              //el.style.backgroundImage = `url(https://www.pngitem.com/pimgs/m/18-186328_transparent-smiley-face-clipart-sunny-clipart-hd-png.png)`;
+                              el.style.backgroundImage = `url(${window.location.origin}/static/cloudy-icon.png)`;
+                         }
+                         else if (sunnyWords.some(sunnyWords => (result.result).includes(sunnyWords))){
+                              //el.style.backgroundImage = `url(https://toppng.com//public/uploads/preview/image-grey-cloud-clipart-11562970825nsz4l7vplv.png)`;
                               el.style.backgroundImage = `url(${window.location.origin}/static/sunny-icon.png)`;
                          }
                          else {
-                              //el.style.backgroundImage = `url(https://toppng.com//public/uploads/preview/image-grey-cloud-clipart-11562970825nsz4l7vplv.png)`;
-                              el.style.backgroundImage = `url(${window.location.origin}/static/rain-icon.png)`;
                          }
                     }).catch(error => {
                          console.log(error);
