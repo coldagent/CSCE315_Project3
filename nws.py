@@ -36,17 +36,17 @@ Parameters:
 """
 def GetForecast():
 
-    # Determine what zone for forecasting is
-    zoneJson = GetForecastZoneByCoords()
+   # Determine what zone for forecasting is
+   zoneJson = GetForecastZoneByCoords()
 
-    # Returns string of api call to get forecast
-    forecastString = zoneJson.get("properties").get("forecast")
+   # Returns string of api call to get forecast
+   forecastString = zoneJson.get("properties").get("forecast")
 
-    response = requests.get(forecastString).json()
+   response = requests.get(forecastString).json()
 
-    periods = response.get("properties").get("periods")
-    shortFore = periods[0].get("shortForecast")
-    return jsonify(result = shortFore)
+   periods = response.get("properties").get("periods")
+   shortFore = periods[0].get("shortForecast")
+   return jsonify(result = shortFore)
 
 
 
@@ -58,13 +58,12 @@ Parameters:
    returns json of NWS hourly weather report (up to 24 hours)
 """
 def GetForecastHourly():
+   # Determine what zone for forecasting is
+   zoneJson = GetForecastZoneByCoords()
 
-    # Determine what zone for forecasting is
-    zoneJson = GetForecastZoneByCoords()
+   # Returns string of api call to get forecast
+   forecastString = zoneJson.get("properties").get("forecastHourly")
 
-    # Returns string of api call to get forecast
-    forecastString = zoneJson.get("properties").get("forecastHourly")
+   response = requests.get(forecastString).json()
 
-    response = requests.get(forecastString).json()
-
-    return response
+   return response

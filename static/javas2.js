@@ -170,66 +170,79 @@ async function markerFunc(coordArray) {
      let prevMark = 0;
      for (let i = 0; i < coordArray.length; i++) {
           if (i > 0) {
-               await fetch(window.location.origin + "/api/get-route?start=" + coordArray[prevMark] + "&end=" + coordArray[i] + "")
+               coordPrev = coordArray[prevMark];
+               coordI = coordArray[i];
+               
+               longDiffMeters = Math.abs(coordPrev[0] - coordI[0]) * 111139;
+               latDiffMeters = Math.abs(coordPrev[1] - coordI[1]) * 111139;
+               distMeters = Math.sqrt(Math.pow(longDiffMeters, 2) + Math.pow(latDiffMeters, 2));
+
+               if (distMeters > 100000) { //add tot distance to parameter and calculate the space distance btwn markers
+                    //console.log("if");
+                    coordPrev = coordArray[prevMark];
+                    coordI = coordArray[i];
+                    //console.log(coordPrev[0] + " == " + coordI[0]);
+                    prevMark = i;
+                    const marker = {
+                         'type': 'Feature',
+                         'properties': {
+                              'iconSize': [40, 40]
+                         },
+                         'geometry': {
+                              'type': 'Point',
+                              'coordinates': coordArray[i]
+                         }
+                    };
+
+                    // Create a DOM element for each marker.
+                    const el = document.createElement('div');
+                    const width = marker.properties.iconSize[0];
+                    const height = marker.properties.iconSize[1];
+                    const sunnyWords = ['Sunny', 'Clear','Fair'];
+                    const cloudyWords = ['Cloud', 'Overcast'];
+                    const rainyWords = ['Rain', 'Drizzle','Shower'];
+                    const snowWords = ['Freezing', 'Ice','Snow', 'Hail'];
+                    const thunderstormWords = ['Thunderstorm'];
+
+                    el.className = 'marker';
+                    (async () => {await fetch(window.location.origin + "/api/forecast?coord=" + coordArray[i] )
                     .then(response => response.json())
                     .then(result => {
-                         distance = result.routes[0].distance;
-                         if (distance > 100000) { //add tot distance to parameter and calculate the space distance btwn markers
-                              console.log("if");
-                              prevMark = i;
-                              const marker = {
-                                   'type': 'Feature',
-                                   'properties': {
-                                        'iconSize': [40, 40]
-                                   },
-                                   'geometry': {
-                                        'type': 'Point',
-                                        'coordinates': coordArray[i]
-                                   }
-                              };
-
-                              // Create a DOM element for each marker.
-                              const el = document.createElement('div');
-                              const width = marker.properties.iconSize[0];
-                              const height = marker.properties.iconSize[1];
-                              el.className = 'marker';
-                              (async () => {await fetch(window.location.origin + "/api/forecast?coord=" + coordArray[i] + "")
-                              .then(response => response.json())
-                              .then(result => {
-                                   if (result.result == "Sunny") {
-                                        //el.style.backgroundImage = `url(https://www.pngitem.com/pimgs/m/18-186328_transparent-smiley-face-clipart-sunny-clipart-hd-png.png)`;
-                                        el.style.backgroundImage = `url(${window.location.origin}/static/sunny-icon.png)`;
-                                   }
-                                   else {
-                                        //el.style.backgroundImage = `url(https://toppng.com//public/uploads/preview/image-grey-cloud-clipart-11562970825nsz4l7vplv.png)`;
-                                        el.style.backgroundImage = `url(${window.location.origin}/static/rain-icon.png)`;
-                                   }
-                              }).catch(error => {
-                                   console.log(error);
-                              });})()
-                              
-                              el.style.width = `${width}px`;
-                              el.style.height = `${height}px`;
-                              el.style.backgroundSize = '100%';
-
-                              // Not needed as of now since we arn't adding data to the markers
-                              // el.addEventListener('click', () => {
-                              //      window.alert(marker.properties.message);
-                              // });
-
-                              // Add markers to the map.
-                              new mapboxgl.Marker(el)
-                                   .setLngLat(marker.geometry.coordinates)
-                                   .addTo(map);
+                         if (thunderstormWords.some(thunderstormWords => (result.result).includes(thunderstormWords))) {
+                              //el.style.backgroundImage = `url(https://www.pngitem.com/pimgs/m/18-186328_transparent-smiley-face-clipart-sunny-clipart-hd-png.png)`;
+                              el.style.backgroundImage = `url(${window.location.origin}/static/thunderstorm-icon.png)`;
+                         }
+                         else if (snowWords.some(snowWords => (result.result).includes(snowWords))) {
+                              //el.style.backgroundImage = `url(https://www.pngitem.com/pimgs/m/18-186328_transparent-smiley-face-clipart-sunny-clipart-hd-png.png)`;
+                              el.style.backgroundImage = `url(${window.location.origin}/static/snow-icon.png)`;
+                         }
+                         else if (rainyWords.some(rainyWords => (result.result).includes(rainyWords))) {
+                              //el.style.backgroundImage = `url(https://www.pngitem.com/pimgs/m/18-186328_transparent-smiley-face-clipart-sunny-clipart-hd-png.png)`;
+                              el.style.backgroundImage = `url(${window.location.origin}/static/rain-icon.png)`;
+                         }
+                         else if (cloudyWords.some(cloudyWords => (result.result).includes(cloudyWords))) {
+                              //el.style.backgroundImage = `url(https://www.pngitem.com/pimgs/m/18-186328_transparent-smiley-face-clipart-sunny-clipart-hd-png.png)`;
+                              el.style.backgroundImage = `url(${window.location.origin}/static/cloudy-icon.png)`;
+                         }
+                         else if (sunnyWords.some(sunnyWords => (result.result).includes(sunnyWords))){
+                              //el.style.backgroundImage = `url(https://toppng.com//public/uploads/preview/image-grey-cloud-clipart-11562970825nsz4l7vplv.png)`;
+                              el.style.backgroundImage = `url(${window.location.origin}/static/sunny-icon.png)`;
                          }
                          else {
-                              console.log("else");
                          }
-
                     }).catch(error => {
-                         //document.getElementById("testhere").innerHTML = "error";
-                         console.log(error)
-                    });
+                         console.log(error);
+                    });})()
+                    
+                    el.style.width = `${width}px`;
+                    el.style.height = `${height}px`;
+                    el.style.backgroundSize = '100%';
+
+                    // Add markers to the map.
+                    new mapboxgl.Marker(el)
+                         .setLngLat(marker.geometry.coordinates)
+                         .addTo(map);
+               }
           }
      }
 }
