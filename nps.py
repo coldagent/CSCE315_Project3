@@ -1,4 +1,4 @@
-from cmath import sqrt
+from math import sqrt
 import requests
 from flask import jsonify, request
 
@@ -31,15 +31,35 @@ def FillParkData():
 
 
 def FindClosestPark():
+
+    if(len(parkInfo) == 0):
+        FillParkData()
+
     # Default limit = 1 to return closest park
     coord = request.args.get("coord").strip("[]").split(",")
     limit = request.args.get("limit", 1)
     if(len(parkInfo) == 0):
         return jsonify("error")
-    
-    shortestValueIndex = 0
-    shortestDistance = sqrt(pow((coord[0] - parkInfo[0].first()), 2) + pow(coord[1] - parkInfo[0].second(), 2))
-    print(shortestDistance)
 
-    return jsonify(shortestDistance)
+    limit = max(int(limit), 0)
+    limit = min(limit, len(parkInfo))
+
+    distMatrix = []
+    sampleCoord = [float(x) for x in coord]
+
+
+    for index in range(0, len(parkInfo)):
+        parkCoord = parkInfo[index][0]
+        xDiff = pow(sampleCoord[0] - parkCoord[0], 2)
+        yDiff = pow(sampleCoord[1] - parkCoord[1], 2)
+        dist = sqrt(xDiff + yDiff)
+        distMatrix.append((dist, parkInfo[index][1]))
+
+
+    distMatrix.sort()
+    print(limit)
+    returnData = [distMatrix[index][1] for index in range(0, limit)]
+
+
+    return jsonify(returnData)
 

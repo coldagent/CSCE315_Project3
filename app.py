@@ -36,9 +36,8 @@ def GetCoords():
 def GetRoute():
    return mapbox.CalcRoute()
 
-@app.route("/api/park-data")
+@app.route("/api/get-park-code")
 def ParkData():
-   nps.FillParkData()
    return nps.FindClosestPark()
 
 

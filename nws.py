@@ -14,16 +14,16 @@ Parameters:
    returns json of NWS zone Response
 """
 def GetForecastZoneByCoords():
-    # Get coords from api call
-    coord = request.args.get("coord").strip("[]").replace(" ", "").split(",")
+   # Get coords from api call
+   coord = request.args.get("coord").strip("[]").replace(" ", "").split(",")
 
-    # Setup request
-    htmlRequest = "https://api.weather.gov/points/{},{}".format(coord[1], coord[0])
+   # Setup request
+   htmlRequest = "https://api.weather.gov/points/{},{}".format(coord[1], coord[0])
 
-    # Process response
-    response = requests.get(htmlRequest).json()
+   # Process response
+   response = requests.get(htmlRequest).json()
 
-    return response
+   return response
 
 
 
