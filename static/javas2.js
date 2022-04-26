@@ -20,6 +20,9 @@ const map = new mapboxgl.Map({
      center: mapCenterCoord
 });
 
+// Zoom controls for map
+map.addControl(new mapboxgl.NavigationControl());
+
 //bounds of the map
 lowerBound = [];
 lowerBound[0] = Math.min(startCoord[0], endCoord[0]) - 0.5;
