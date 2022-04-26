@@ -233,6 +233,10 @@ async function markerFunc(coordArray) {
                     }).catch(error => {
                          console.log(error);
                     });})()
+
+                    await getParks(coordArray[i]);
+
+                    
                     
                     el.style.width = `${width}px`;
                     el.style.height = `${height}px`;
@@ -259,6 +263,26 @@ async function totalDistance() {
                console.log(set);
 
                //return set;
+          }).catch(error => {
+               return "error"
+          });
+}
+
+var addedParks = [];
+async function getParks(coordIn) {
+     fetch(window.location.origin + "/api/get-park-code?coord=[" + coordIn + "]")
+          .then(response => response.json())
+          .then(result => {
+               res = String(result.result);
+               if (addedParks.indexOf(res) == -1){
+                    var ul = document.getElementById("dynamic-list");
+                    //var candidate = document.getElementById("candidate");
+                    var li = document.createElement("li");
+                    li.setAttribute('id',result.result);
+                    li.appendChild(document.createTextNode(result.result));
+                    ul.appendChild(li);
+                    addedParks.push(res);
+               }
           }).catch(error => {
                return "error"
           });
