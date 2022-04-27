@@ -1,6 +1,5 @@
 import requests
 from flask import Flask, render_template, request, jsonify, make_response
-from mapbox import LocToGeoCoords
 app = Flask(__name__)
 
 """
@@ -13,32 +12,49 @@ import nps
 
 
 
-
 """
    API Routing Calls
+"""
+"""
+      National Weather Service API
 """
 @app.route("/api/forecast")
 def GetForecast():
    return nws.GetForecast()
-
 
 @app.route("/api/forecast-hourly")
 def GetForecastHourly():
    return nws.GetForecastHourly()
 
 
+"""
+      MapBox API
+"""
 @app.route("/api/get-coords")
 def GetCoords():
    return mapbox.LocToGeoCoords()
-
 
 @app.route("/api/get-route")
 def GetRoute():
    return mapbox.CalcRoute()
 
+
+"""
+      National Park Service API
+"""
 @app.route("/api/get-park-code")
-def ParkData():
+def GetParkData():
    return nps.FindClosestPark()
+
+@app.route("/api/get-park-activities")
+def GetParkActivities():
+   return nps.GetParkActivities()
+
+@app.route("/api/get-park-info")
+def GetParkInformation():
+   return nps.GetParkInformation()
+
+
 
 
 
