@@ -270,18 +270,46 @@ async function totalDistance() {
 
 var addedParks = [];
 async function getParks(coordIn) {
-     fetch(window.location.origin + "/api/get-park-code?coord=[" + coordIn + "]")
+     fetch(window.location.origin + "/api/get-park-code?coord=[" + coordIn + "]&limit=2")
           .then(response => response.json())
           .then(result => {
-               res = String(result.result);
-               if (addedParks.indexOf(res) == -1){
-                    var ul = document.getElementById("dynamic-list");
-                    //var candidate = document.getElementById("candidate");
-                    var li = document.createElement("li");
-                    li.setAttribute('id',result.result);
-                    li.appendChild(document.createTextNode(result.result));
-                    ul.appendChild(li);
-                    addedParks.push(res);
+               for (var i=0; i < result.result.length; i++) {
+                    parkcode = String(result.result[i]);
+                    if (addedParks.indexOf(parkcode) == -1){
+                         // var ul = document.getElementById("dynamic-list");
+                         // //var candidate = document.getElementById("candidate");
+                         // var li = document.createElement("li");
+                         // li.setAttribute('id',res);
+                         // li.appendChild(document.createTextNode(res));
+                         // ul.appendChild(li);
+                         addedParks.push(parkcode);
+
+                         fetch(window.location.origin + "/api/get-park-info?park-code=" + parkcode)
+                              .then(response => response.json())
+                              .then(result => {
+                                   
+                                   res = String(result.result["fullName"] + result.result["description"]) ;
+                             
+                                   var ul = document.getElementById("dynamic-list");
+                                   //var candidate = document.getElementById("candidate");
+                                   var li = document.createElement("li");
+                                   li.setAttribute('id',res);
+                                   li.appendChild(document.createTextNode(res));
+                                   ul.appendChild(li);
+                                        
+                                   
+                              }).catch(error => {
+                                   return "error"
+                              });
+
+
+
+
+
+
+
+
+                    }
                }
           }).catch(error => {
                return "error"

@@ -65,7 +65,7 @@ def FindClosestPark():
     returnData = [distMatrix[index][1] for index in range(0, limit)]
 
 
-    return jsonify(returnData)
+    return jsonify(result = returnData)
 
 
 
@@ -121,5 +121,5 @@ def GetParkInformation():
     returnData["images"] = data[0].get("images")
     
 
-    return jsonify(returnData)
+    return jsonify(result = returnData)
 
