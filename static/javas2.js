@@ -317,5 +317,24 @@ async function getParks(coordIn) {
 }
 
 
-//distance = result['routes'][0]['distance']; //meters
-//duration = result['routes'][0]['duration']; //minutes
+
+/* 
+     Add an event listener that runs
+     when a user clicks on the map element.
+*/
+map.on('click', (event) => {
+     // If the user clicked on one of your markers, get its information.
+     const features = map.queryRenderedFeatures(event.point, {
+       layers: ['nps'] // replace with your layer name
+     });
+     if (!features.length) {
+          return;
+     }
+     const feature = features[0];
+
+     // Code from the next step will go here.
+     const popup = new mapboxgl.Popup({ offset: [0, -15] })
+     .setLngLat(feature.geometry.coordinates)
+     .setHTML(`<h3>I have no mouth but I must scream</h3><p>${feature.properties.parkCode}</p>`)
+     .addTo(map);
+});
