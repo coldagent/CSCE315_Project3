@@ -152,19 +152,19 @@ function getCookie(cname) {
 }
 
 //opens tab onclick
-function openActivities(evt, cityName) {
-     var i, tabcontent, tablinks;
-     tabcontent = document.getElementsByClassName("tabcontent");
-     for (i = 0; i < tabcontent.length; i++) {
-          tabcontent[i].style.display = "none";
-     }
-     tablinks = document.getElementsByClassName("tablinks");
-     for (i = 0; i < tablinks.length; i++) {
-          tablinks[i].className = tablinks[i].className.replace(" active", "");
-     }
-     document.getElementById(cityName).style.display = "block";
-     evt.currentTarget.className += " active";
-}
+// function openActivities(evt, cityName) {
+//      var i, tabcontent, tablinks;
+//      tabcontent = document.getElementsByClassName("tabcontent");
+//      for (i = 0; i < tabcontent.length; i++) {
+//           tabcontent[i].style.display = "none";
+//      }
+//      tablinks = document.getElementsByClassName("tablinks");
+//      for (i = 0; i < tablinks.length; i++) {
+//           tablinks[i].className = tablinks[i].className.replace(" active", "");
+//      }
+//      document.getElementById(cityName).style.display = "block";
+//      evt.currentTarget.className += " active";
+// }
 
 // adds markers to route using "coordinate" array from API 
 // makes sure coordinates are not too close together
@@ -236,6 +236,10 @@ async function markerFunc(coordArray) {
                     }).catch(error => {
                          console.log(error);
                     });})()
+
+                    await getParks(coordArray[i]);
+
+                    
                     
                     el.style.width = `${width}px`;
                     el.style.height = `${height}px`;
@@ -262,6 +266,54 @@ async function totalDistance() {
                console.log(set);
 
                //return set;
+          }).catch(error => {
+               return "error"
+          });
+}
+
+var addedParks = [];
+async function getParks(coordIn) {
+     fetch(window.location.origin + "/api/get-park-code?coord=[" + coordIn + "]&limit=2")
+          .then(response => response.json())
+          .then(result => {
+               for (var i=0; i < result.result.length; i++) {
+                    parkcode = String(result.result[i]);
+                    if (addedParks.indexOf(parkcode) == -1){
+                         // var ul = document.getElementById("dynamic-list");
+                         // //var candidate = document.getElementById("candidate");
+                         // var li = document.createElement("li");
+                         // li.setAttribute('id',res);
+                         // li.appendChild(document.createTextNode(res));
+                         // ul.appendChild(li);
+                         addedParks.push(parkcode);
+
+                         fetch(window.location.origin + "/api/get-park-info?park-code=" + parkcode)
+                              .then(response => response.json())
+                              .then(result => {
+                                   
+                                   res = String(result.result["fullName"] + result.result["description"]) ;
+                             
+                                   var ul = document.getElementById("dynamic-list");
+                                   //var candidate = document.getElementById("candidate");
+                                   var li = document.createElement("li");
+                                   li.setAttribute('id',res);
+                                   li.appendChild(document.createTextNode(res));
+                                   ul.appendChild(li);
+                                        
+                                   
+                              }).catch(error => {
+                                   return "error"
+                              });
+
+
+
+
+
+
+
+
+                    }
+               }
           }).catch(error => {
                return "error"
           });
