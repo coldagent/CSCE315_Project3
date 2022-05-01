@@ -7,7 +7,7 @@ endCoord = [];
 cookieEndCoord = getCookie("endCoord").split(",");
 endCoord[0] = parseFloat(cookieEndCoord[0]);
 endCoord[1] = parseFloat(cookieEndCoord[1]);
-totalDistance();
+
 mapCenterCoord = [];
 mapCenterCoord[0] = (startCoord[0] + endCoord[0]) / 2;
 mapCenterCoord[1] = (startCoord[1] + endCoord[1]) / 2;
@@ -30,6 +30,9 @@ upperBound[1] = Math.max(endCoord[1], startCoord[1]) + 0.5;
 
 const bounds = [lowerBound, upperBound];
 map.fitBounds(bounds);
+
+getRoute(endCoord);
+totalDistance();
 
 // function makes a directions request 
 // highlights the route
@@ -78,7 +81,6 @@ async function getRoute(end) {
 }
 // on map load, mark the start and end coordinates
 map.on('load', () => {
-     getRoute(endCoord);
 
      map.addLayer({
           id: 'markStart',
@@ -128,7 +130,6 @@ map.on('load', () => {
                'circle-color': '#f30'
           }
      });
-
 });
 
 //parses all cookie to get the cookie with cname
@@ -148,105 +149,84 @@ function getCookie(cname) {
      return "";
 }
 
-//opens tab onclick
-// function openActivities(evt, cityName) {
-//      var i, tabcontent, tablinks;
-//      tabcontent = document.getElementsByClassName("tabcontent");
-//      for (i = 0; i < tabcontent.length; i++) {
-//           tabcontent[i].style.display = "none";
-//      }
-//      tablinks = document.getElementsByClassName("tablinks");
-//      for (i = 0; i < tablinks.length; i++) {
-//           tablinks[i].className = tablinks[i].className.replace(" active", "");
-//      }
-//      document.getElementById(cityName).style.display = "block";
-//      evt.currentTarget.className += " active";
-// }
 
 // adds markers to route using "coordinate" array from API 
 // makes sure coordinates are not too close together
 // tests the forecast of each coordinate and prints the appropriate weather icon
 async function markerFunc(coordArray) {
      let prevMark = 0;
-     for (let i = 0; i < coordArray.length; i++) {
-          if (i > 0) {
-               coordPrev = coordArray[prevMark];
-               coordI = coordArray[i];
+     for (let i = 1; i < coordArray.length; i++) {
+          coordPrev = coordArray[prevMark];
+          coordI = coordArray[i];
+          
+          longDiffMeters = Math.abs(coordPrev[0] - coordI[0]) * 111139;
+          latDiffMeters = Math.abs(coordPrev[1] - coordI[1]) * 111139;
+          distMeters = Math.sqrt(Math.pow(longDiffMeters, 2) + Math.pow(latDiffMeters, 2));
+
+          if (distMeters > 100000) { //add tot distance to parameter and calculate the space distance btwn markers
+
+               prevMark = i;
+
+               const marker = {
+                    'type': 'Feature',
+                    'properties': {
+                         'iconSize': [40, 40]
+                    },
+                    'geometry': {
+                         'type': 'Point',
+                         'coordinates': coordArray[i]
+                    }
+               };
+
+               // Create a DOM element for each marker.
+               const el = document.createElement('div');
+               const width = marker.properties.iconSize[0];
+               const height = marker.properties.iconSize[1];
+
+               // Works to be checked for
+               const sunnyWords = ['sunny', 'clear','fair'];
+               const cloudyWords = ['cloud', 'overcast'];
+               const rainyWords = ['rain', 'drizzle','shower'];
+               const snowWords = ['freezing', 'ice','snow', 'hail'];
+               const thunderstormWords = ['thunderstorm'];
+
+               el.className = 'marker';
+               (async () => {await fetch(window.location.origin + "/api/forecast?coord=" + coordArray[i] )
+               .then(response => response.json())
+               .then(result => {
+                    if (thunderstormWords.some(thunderstormWords => (result.result.toLowerCase()).includes(thunderstormWords))) {
+                         el.style.backgroundImage = `url(${window.location.origin}/static/thunderstorm-icon.png)`;
+                    }
+                    else if (snowWords.some(snowWords => (result.result.toLowerCase()).includes(snowWords))) {
+                         el.style.backgroundImage = `url(${window.location.origin}/static/snow-icon.png)`;
+                    }
+                    else if (rainyWords.some(rainyWords => (result.result.toLowerCase()).includes(rainyWords))) {
+                         el.style.backgroundImage = `url(${window.location.origin}/static/rain-icon.png)`;
+                    }
+                    else if (cloudyWords.some(cloudyWords => (result.result.toLowerCase()).includes(cloudyWords))) {
+                         el.style.backgroundImage = `url(${window.location.origin}/static/cloudy-icon.png)`;
+                    }
+                    else if (sunnyWords.some(sunnyWords => (result.result.toLowerCase()).includes(sunnyWords))){
+                         el.style.backgroundImage = `url(${window.location.origin}/static/sunny-icon.png)`;
+                    }
+                    else {
+                    }
+               }).catch(error => {
+                    console.log(error);
+               });})()
+
+               await getParks(coordArray[i]);
+
                
-               longDiffMeters = Math.abs(coordPrev[0] - coordI[0]) * 111139;
-               latDiffMeters = Math.abs(coordPrev[1] - coordI[1]) * 111139;
-               distMeters = Math.sqrt(Math.pow(longDiffMeters, 2) + Math.pow(latDiffMeters, 2));
+               
+               el.style.width = `${width}px`;
+               el.style.height = `${height}px`;
+               el.style.backgroundSize = '100%';
 
-               if (distMeters > 100000) { //add tot distance to parameter and calculate the space distance btwn markers
-                    //console.log("if");
-                    coordPrev = coordArray[prevMark];
-                    coordI = coordArray[i];
-                    //console.log(coordPrev[0] + " == " + coordI[0]);
-                    prevMark = i;
-                    const marker = {
-                         'type': 'Feature',
-                         'properties': {
-                              'iconSize': [40, 40]
-                         },
-                         'geometry': {
-                              'type': 'Point',
-                              'coordinates': coordArray[i]
-                         }
-                    };
-
-                    // Create a DOM element for each marker.
-                    const el = document.createElement('div');
-                    const width = marker.properties.iconSize[0];
-                    const height = marker.properties.iconSize[1];
-                    const sunnyWords = ['Sunny', 'Clear','Fair'];
-                    const cloudyWords = ['Cloud', 'Overcast'];
-                    const rainyWords = ['Rain', 'Drizzle','Shower'];
-                    const snowWords = ['Freezing', 'Ice','Snow', 'Hail'];
-                    const thunderstormWords = ['Thunderstorm'];
-
-                    el.className = 'marker';
-                    (async () => {await fetch(window.location.origin + "/api/forecast?coord=" + coordArray[i] )
-                    .then(response => response.json())
-                    .then(result => {
-                         if (thunderstormWords.some(thunderstormWords => (result.result).includes(thunderstormWords))) {
-                              //el.style.backgroundImage = `url(https://www.pngitem.com/pimgs/m/18-186328_transparent-smiley-face-clipart-sunny-clipart-hd-png.png)`;
-                              el.style.backgroundImage = `url(${window.location.origin}/static/thunderstorm-icon.png)`;
-                         }
-                         else if (snowWords.some(snowWords => (result.result).includes(snowWords))) {
-                              //el.style.backgroundImage = `url(https://www.pngitem.com/pimgs/m/18-186328_transparent-smiley-face-clipart-sunny-clipart-hd-png.png)`;
-                              el.style.backgroundImage = `url(${window.location.origin}/static/snow-icon.png)`;
-                         }
-                         else if (rainyWords.some(rainyWords => (result.result).includes(rainyWords))) {
-                              //el.style.backgroundImage = `url(https://www.pngitem.com/pimgs/m/18-186328_transparent-smiley-face-clipart-sunny-clipart-hd-png.png)`;
-                              el.style.backgroundImage = `url(${window.location.origin}/static/rain-icon.png)`;
-                         }
-                         else if (cloudyWords.some(cloudyWords => (result.result).includes(cloudyWords))) {
-                              //el.style.backgroundImage = `url(https://www.pngitem.com/pimgs/m/18-186328_transparent-smiley-face-clipart-sunny-clipart-hd-png.png)`;
-                              el.style.backgroundImage = `url(${window.location.origin}/static/cloudy-icon.png)`;
-                         }
-                         else if (sunnyWords.some(sunnyWords => (result.result).includes(sunnyWords))){
-                              //el.style.backgroundImage = `url(https://toppng.com//public/uploads/preview/image-grey-cloud-clipart-11562970825nsz4l7vplv.png)`;
-                              el.style.backgroundImage = `url(${window.location.origin}/static/sunny-icon.png)`;
-                         }
-                         else {
-                         }
-                    }).catch(error => {
-                         console.log(error);
-                    });})()
-
-                    await getParks(coordArray[i]);
-
-                    
-                    
-                    el.style.width = `${width}px`;
-                    el.style.height = `${height}px`;
-                    el.style.backgroundSize = '100%';
-
-                    // Add markers to the map.
-                    new mapboxgl.Marker(el)
-                         .setLngLat(marker.geometry.coordinates)
-                         .addTo(map);
-               }
+               // Add markers to the map.
+               new mapboxgl.Marker(el)
+                    .setLngLat(marker.geometry.coordinates)
+                    .addTo(map);
           }
      }
 }
@@ -260,9 +240,7 @@ async function totalDistance() {
           .then(result => {
                distance = result['routes'][0]['distance']; //meters
                markerFunc(result['routes'][0]['geometry']['coordinates']);
-               console.log(set);
 
-               //return set;
           }).catch(error => {
                return "error"
           });
@@ -289,7 +267,7 @@ async function getParks(coordIn) {
                               .then(result => {
                                    
                                    res = String(result.result["fullName"] + result.result["description"]) ;
-                             
+                              
                                    var ul = document.getElementById("dynamic-list");
                                    //var candidate = document.getElementById("candidate");
                                    var li = document.createElement("li");
@@ -301,14 +279,6 @@ async function getParks(coordIn) {
                               }).catch(error => {
                                    return "error"
                               });
-
-
-
-
-
-
-
-
                     }
                }
           }).catch(error => {

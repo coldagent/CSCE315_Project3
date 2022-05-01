@@ -15,15 +15,16 @@ Parameters:
 """
 def GetForecastZoneByCoords():
    # Get coords from api call
-   coord = request.args.get("coord").strip("[]").replace(" ", "").split(",")
+   coord = request.args.get("coord").strip("[]").replace(" ","").split(",")[::-1]
 
    # Setup request
-   htmlRequest = "https://api.weather.gov/points/{},{}".format(coord[1], coord[0])
+   htmlRequest = "https://api.weather.gov/points/{},{}".format(coord[0], coord[1])
 
    # Process response
-   response = requests.get(htmlRequest).json()
+   response = requests.get(htmlRequest)   
 
-   return response
+   return response.json()
+
 
 
 
@@ -42,11 +43,14 @@ def GetForecast():
    # Returns string of api call to get forecast
    forecastString = zoneJson.get("properties").get("forecast")
 
-   response = requests.get(forecastString).json()
+   response = requests.get(forecastString)
 
-   periods = response.get("properties").get("periods")
-   shortFore = periods[0].get("shortForecast")
-   return jsonify(result = shortFore)
+   if(response.ok):
+      periods = response.json().get("properties").get("periods")
+      shortFore = periods[0].get("shortForecast")
+      return jsonify(result = shortFore)
+   
+   return jsonify(result = "")
 
 
 
