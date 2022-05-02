@@ -313,14 +313,21 @@ map.on('click', (event) => {
           .then(result => {
                
                parkName = String(result.result["fullName"]);
-               res = parkName + result.result["description"];
+               res = String(result.result["description"]);
           
                var ul = document.getElementById("dynamic-list");
                var li = document.createElement("li");
-               ul.innerHTML = ""
-               li.innerHTML = ""
-               li.setAttribute('id',res);
-               li.appendChild(document.createTextNode(res));
+               var h1 = document.createElement("h1");
+               var p = document.createElement("p");
+               ul.innerHTML = "";
+               li.innerHTML = "";
+               h1.innerHTML = "";
+               p.innerHTML = "";
+               li.setAttribute('id', feature.properties.parkCode);
+               h1.appendChild(document.createTextNode(parkName));
+               p.appendChild(document.createTextNode(res));
+               li.appendChild(h1);
+               li.appendChild(p);
                ul.appendChild(li);
                
           }).then(() =>{
